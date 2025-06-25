@@ -17,35 +17,56 @@ namespace ProductCategoryAPI.Controllers
             _context = context;
         }
 
-        [HttpGet]   // GET: api/product
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
-            return await _context.Products
+            var products = await _context.Products
                 .Include(p => p.ProductCategories)
                 .ThenInclude(pc => pc.Category)
                 .ToListAsync();
+
+            var productDtos = products.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Categories = p.ProductCategories.Select(pc => pc.Category.Name).ToList()
+            }).ToList();
+
+            return Ok(productDtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(Guid id)
+        public async Task<ActionResult<ProductDto>> GetProduct(Guid id)
         {
             var product = await _context.Products
-            .Include(p => p.ProductCategories)
-            .ThenInclude(pc => pc.Category)
-            .FirstOrDefaultAsync(p => p.Id == id);
+                .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
                 return NotFound();
 
-            return product;
+            var productDto = new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Categories = product.ProductCategories.Select(pc => pc.Category.Name).ToList()
+            };
+
+            return Ok(productDto);
         }
+
 
         [HttpPost]  // POST: api/product
         public async Task<ActionResult<Product>> CreateProduct(ProductCreateDto dto)
         {
             var product = new Product
             {
+                Id = Guid.NewGuid(),
                 Name = dto.Name,
+                Description = dto.Description,
                 ProductCategories = new List<ProductCategory>()
             };
             foreach (var categoryId in dto.CategoryIds)
@@ -73,6 +94,7 @@ namespace ProductCategoryAPI.Controllers
                 return NotFound();
 
             product.Name = dto.Name;
+            product.Description = dto.Description;
 
             product.ProductCategories.Clear();
 
@@ -97,7 +119,7 @@ namespace ProductCategoryAPI.Controllers
             .Include(p => p.ProductCategories)
             .FirstOrDefaultAsync(p => p.Id == id);
 
-            if(product == null)
+            if (product == null)
                 return NotFound();
 
             _context.Products.Remove(product);

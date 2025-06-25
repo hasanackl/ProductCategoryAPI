@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product & Category Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Product & Category Manager</h1>
+    <div class="row g-4">
+      
+      <!-- CATEGORY -->
+      <div class="col-lg-6 col-12">
+        <div class="card p-4 shadow rounded-4">
+          <h4>Category</h4>
+          <form id="categoryForm" class="mb-3">
+            <input type="hidden" id="categoryId">
+            <div class="mb-3">
+              <input type="text" class="form-control" id="categoryName" placeholder="Category Name" required>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary px-4 py-2">Save Category</button>
+              <button type="button" class="btn btn-secondary px-4 py-2" id="categoryCancel" style="display: none;">Cancel</button>
+            </div>
+          </form>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th style="white-space: nowrap;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="categoryTable">
+              <tr>
+                <td>Example Category</td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-warning px-4 py-1">Edit</button>
+                    <button class="btn btn-danger px-4 py-1">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- PRODUCT -->
+      <div class="col-lg-6 col-12">
+        <div class="card p-4 shadow rounded-4">
+          <h4>Product</h4>
+          <form id="productForm" class="mb-3">
+            <input type="hidden" id="productId">
+            <div class="mb-3">
+              <input type="text" class="form-control" id="productName" placeholder="Product Name" required>
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control" id="productDescription" placeholder="Description" required>
+            </div>
+            <div class="mb-3">
+              <select multiple class="form-select" id="productCategories" required></select>
+              <div class="form-text">Select one or more categories</div>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary px-4 py-2">Save Product</button>
+              <button type="button" class="btn btn-secondary px-4 py-2" id="productCancel" style="display: none;">Cancel</button>
+            </div>
+          </form>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Categories</th>
+                  <th style="white-space: nowrap;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+const API = 'http://localhost:5110/api';
+
+// Utility
+const qs = (sel) => document.querySelector(sel);
+
+// CATEGORY
+const loadCategories = async () => {
+  const res = await fetch(`${API}/category`);
+  const cats = await res.json();
+  const table = qs('#categoryTable');
+  const select = qs('#productCategories');
+  table.innerHTML = '';
+  select.innerHTML = '';
+  cats.forEach(c => {
+    table.innerHTML += `
+      <tr>
+        <td>${c.name}</td>
+        <td>
+          <button class="btn btn-sm btn-warning" onclick="editCategory('${c.id}','${c.name}')">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteCategory('${c.id}')">Del</button>
+        </td>
+      </tr>`;
+    select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+  });
+};
+
+const saveCategory = async (e) => {
+  e.preventDefault();
+  const id = qs('#categoryId').value;
+  const name = qs('#categoryName').value.trim();
+  const method = id ? 'PUT' : 'POST';
+  const url = id ? `${API}/category/${id}` : `${API}/category`;
+  const body = id
+    ? JSON.stringify({ id, name })   // PUT için id var
+    : JSON.stringify({ name });      // POST için id yok
+
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body
+  });
+
+  if (res.ok) {
+    qs('#categoryForm').reset();
+    qs('#categoryId').value = '';
+    qs('#categoryCancel').style.display = 'none';
+    await loadCategories();
+    await loadProducts();
+  } else {
+    const error = await res.text();
+    alert(`Category save failed: ${error}`);
+  }
+};
+
+
+const editCategory = (id, name) => {
+  qs('#categoryId').value = id;
+  qs('#categoryName').value = name;
+  qs('#categoryCancel').style.display = 'inline-block';
+};
+
+const deleteCategory = async (id) => {
+  if (!confirm('Delete?')) return;
+  await fetch(`${API}/category/${id}`, { method: 'DELETE' });
+  await loadCategories();
+  await loadProducts();
+};
+
+qs('#categoryForm').addEventListener('submit', saveCategory);
+qs('#categoryCancel').addEventListener('click', () => {
+  qs('#categoryForm').reset();
+  qs('#categoryId').value = '';
+  qs('#categoryCancel').style.display = 'none';
+});
+
+// PRODUCT
+const loadProducts = async () => {
+  const res = await fetch(`${API}/product`);
+  const prods = await res.json();
+  const table = qs('#productTable');
+  table.innerHTML = '';
+  prods.forEach(p => {
+    const catNames = p.categories.map(c => c.name).join(', ');
+    table.innerHTML += `
+      <tr>
+        <td>${p.name}</td>
+        <td>${p.description}</td>
+        <td>${catNames}</td>
+        <td>
+          <button class="btn btn-sm btn-warning" onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteProduct('${p.id}')">Del</button>
+        </td>
+      </tr>`;
+  });
+};
+
+const saveProduct = async (e) => {
+  e.preventDefault();
+
+  const id = qs('#productId').value;
+  const name = qs('#productName').value.trim();
+  const description = qs('#productDescription').value.trim();
+  const categoryIds = Array.from(qs('#productCategories').selectedOptions).map(o => o.value);
+
+  if (!name || !description || categoryIds.length === 0) {
+    alert('Please fill all fields');
+    return;
+  }
+
+  const method = id ? 'PUT' : 'POST';
+  const url = id ? `${API}/product/${id}` : `${API}/product`;
+  const bodyObj = { name, description, categoryIds };
+  const body = JSON.stringify(bodyObj);
+
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body
+    });
+
+    const text = await res.text();  // Yanıtı düz metin olarak al
+
+    if (res.ok) {
+      console.log('✅ Product saved successfully:', text);
+
+      qs('#productForm').reset();
+      qs('#productId').value = '';
+      qs('#productCancel').style.display = 'none';
+      await loadProducts();
+
+      alert('Product saved successfully!');
+    } else {
+      console.error('❌ Server error response:', text);
+      alert(`Product save failed:\n${text}`);
+    }
+  } catch (err) {
+    console.error('❌ Network or code error:', err);
+    alert(`Unexpected error: ${err.message}`);
+  }
+};
+
+
+
+const editProduct = (p) => {
+  qs('#productId').value = p.id;
+  qs('#productName').value = p.name;
+  qs('#productDescription').value = p.description;
+  Array.from(qs('#productCategories').options).forEach(o => {
+    o.selected = p.categories.some(c => c.id == o.value);
+  });
+  qs('#productCancel').style.display = 'inline-block';
+};
+
+const deleteProduct = async (id) => {
+  if (!confirm('Delete?')) return;
+  await fetch(`${API}/product/${id}`, { method: 'DELETE' });
+  await loadProducts();
+};
+
+qs('#productForm').addEventListener('submit', saveProduct);
+qs('#productCancel').addEventListener('click', () => {
+  qs('#productForm').reset();
+  qs('#productId').value = '';
+  qs('#productCancel').style.display = 'none';
+});
+
+// INIT
+window.onload = async () => {
+  await loadCategories();
+  await loadProducts();
+};
+</script>
+
+</body>
+</html>

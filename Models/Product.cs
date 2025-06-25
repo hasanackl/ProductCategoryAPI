@@ -12,7 +12,7 @@ namespace ProductCategoryAPI.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public ICollection<ProductCategory> ProductCategories { get; set; }
+        public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
 
     }
 }
