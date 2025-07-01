@@ -1,12 +1,3 @@
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.csproj.AssemblyReference.cache
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\rpswa.dswa.cache.json
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.AssemblyInfoInputs.cache
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.AssemblyInfo.cs
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.csproj.CoreCompileInputs.cache
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.sourcelink.json
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\appsettings.json
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\ProductCategoryAPI.staticwebassets.endpoints.json
@@ -55,6 +46,9 @@ C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Microsoft
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Mono.TextTemplating.dll
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\System.ClientModel.dll
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\System.CodeDom.dll
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\System.Composition.AttributedModel.dll
@@ -147,6 +141,15 @@ C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\runtimes\
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.csproj.AssemblyReference.cache
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.AssemblyInfoInputs.cache
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.AssemblyInfo.cs
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.csproj.CoreCompileInputs.cache
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.sourcelink.json
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\rjimswa.dswa.cache.json
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
@@ -161,6 +164,3 @@ C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\refint\Pr
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.pdb
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ProductCategoryAPI.genruntimeconfig.cache
 C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\obj\Debug\net9.0\ref\ProductCategoryAPI.dll
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\Users\Hasan\OneDrive\Masaüstü\ProductCategoryAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll

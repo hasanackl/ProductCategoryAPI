@@ -17,6 +17,18 @@ namespace ProductCategoryAPI.Controllers
             _context = context;
         }
 
+        [Route("api/[controller]")]
+        [ApiController]
+        [JwtAuthentication]
+        public class ProductsController : ControllerBase
+        {
+            [HttpGet]
+            public IActionResult GetProducts()
+            {
+                return Ok(new { Message = "Token is valid, products are listed." });
+            }
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
