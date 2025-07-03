@@ -24,6 +24,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = new DataSeeder(scope.ServiceProvider.GetRequiredService<AppDbContext>());
+    await seeder.SeedUsersAsync();
+}
+
 app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())

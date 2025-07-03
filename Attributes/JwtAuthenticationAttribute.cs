@@ -26,7 +26,6 @@ public class JwtAuthenticationAttribute : Attribute, IAuthorizationFilter
                 context.Result = new UnauthorizedResult();
                 return;
             }
-
         }
         catch
         {

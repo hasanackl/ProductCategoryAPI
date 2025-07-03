@@ -11,6 +11,7 @@
       position: fixed;
       overflow-y: auto;
     }
+
     main {
       margin-left: 16rem;
     }
@@ -25,7 +26,7 @@
       <nav class="col-md-3 col-lg-2 d-md-block bg-white sidebar shadow-sm rounded-end-4 p-3">
         <h5>Menu</h5>
         <ul class="nav flex-column" id="sidebarMenu">
-          
+
         </ul>
       </nav>
 
@@ -100,6 +101,38 @@
               </div>
             </div>
           </div>
+          <!-- USER LIST -->
+          <div class="col-12 content-section" id="userListSection" style="display: none;">
+            <div class="card p-4 shadow rounded-4">
+              <h4>All Users</h4>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <label for="limitSelect" class="form-label me-2">Users per page:</label>
+                <select id="limitSelect" class="form-select d-inline-block" style="width: auto;">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50" selected>50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped" id="usersTable">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>UserName</th>
+                      <th>FirstName</th>
+                      <th>LastName</th>
+                      <th>Role</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <nav>
+                <ul class="pagination" id="pagination"></ul>
+              </nav>
+            </div>
+          </div>
 
         </div>
       </main>
@@ -131,8 +164,22 @@
         });
         return html;
       };
-
       container.innerHTML = createMenuHtml(menus);
+      setTimeout(() => {
+        const allLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+
+        allLinks.forEach(link => {
+          const name = link.textContent.trim().toLowerCase();
+
+          if (name === "all users") {
+            link.addEventListener("click", (e) => {
+              e.preventDefault();
+              showSection("userListSection");
+            });
+          }
+        });
+      }, 500);
+
     };
 
     // CATEGORY
@@ -281,6 +328,139 @@
       qs('#productId').value = '';
       qs('#productCancel').style.display = 'none';
     });
+
+    // USER LIST PAGINATION
+    const apiUrl = "http://localhost:5110/api/user/users";
+    let limit = 50;
+    let currentPage = 1;
+    let totalUsers = 0;
+
+    async function fetchTotalUsers() {
+      const response = await fetch("http://localhost:5110/api/user/users/count");
+      const data = await response.json();
+      return data.count;
+    }
+
+    async function fetchUsers(page, limit) {
+      const response = await fetch(`${apiUrl}?page=${page}&limit=${limit}`);
+      const users = await response.json();
+      return users;
+    }
+
+    function renderUsers(users) {
+      const tbody = document.querySelector("#usersTable tbody");
+      tbody.innerHTML = "";
+      users.forEach((user, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+      <td>${(currentPage - 1) * limit + index + 1}</td>
+      <td>${user.username}</td>
+      <td>${user.firstName}</td>
+      <td>${user.lastName}</td>
+      <td>${user.role}</td>
+    `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderPagination() {
+      const pagination = document.getElementById("pagination");
+      pagination.innerHTML = "";
+
+      const totalPages = Math.ceil(totalUsers / limit);
+      const maxVisiblePages = 10;
+
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = startPage + maxVisiblePages - 1;
+
+      if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+      // Previous
+      const prevLi = document.createElement("li");
+      prevLi.className = "page-item" + (currentPage === 1 ? " disabled" : "");
+      prevLi.innerHTML = `<a class="page-link" href="#">Previous</a>`;
+      prevLi.onclick = (e) => {
+        e.preventDefault();
+        if (currentPage > 1) {
+          currentPage--;
+          loadUsers();
+        }
+      };
+      pagination.appendChild(prevLi);
+      // Page numbers
+      for (let i = startPage; i <= endPage; i++) {
+        const li = document.createElement("li");
+        li.className = "page-item" + (i === currentPage ? " active" : "");
+        li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+        li.onclick = (e) => {
+          e.preventDefault();
+          if (currentPage !== i) {
+            currentPage = i;
+            loadUsers();
+          }
+        };
+        pagination.appendChild(li);
+      }
+      // Next
+      const nextLi = document.createElement("li");
+      nextLi.className = "page-item" + (currentPage === totalPages ? " disabled" : "");
+      nextLi.innerHTML = `<a class="page-link" href="#">Next</a>`;
+      nextLi.onclick = (e) => {
+        e.preventDefault();
+        if (currentPage < totalPages) {
+          currentPage++;
+          loadUsers();
+        }
+      };
+      pagination.appendChild(nextLi);
+    }
+
+
+    async function loadUsers() {
+      const resCount = await fetch("http://localhost:5110/api/user/users/count");
+      const { count } = await resCount.json();
+      totalUsers = count;
+
+      const resUsers = await fetch(`http://localhost:5110/api/user/users?page=${currentPage}&limit=${limit}`);
+      const users = await resUsers.json();
+
+      const tbody = document.querySelector("#usersTable tbody");
+      tbody.innerHTML = "";
+
+      users.forEach((user, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+      <td>${(currentPage - 1) * limit + index + 1}</td>
+      <td>${user.username}</td>
+      <td>${user.firstName}</td>
+      <td>${user.lastName}</td>
+      <td>${user.role}</td>
+    `;
+        tbody.appendChild(tr);
+      });
+
+      renderPagination();
+    }
+
+    document.getElementById("limitSelect").addEventListener("change", async (e) => {
+      limit = parseInt(e.target.value);
+      currentPage = 1;
+      totalUsers = await fetchTotalUsers();
+      loadUsers();
+    });
+
+    function showSection(sectionId) {
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.style.display = 'none';
+      });
+      const sectionToShow = document.getElementById(sectionId);
+      if (sectionToShow) sectionToShow.style.display = 'block';
+      if (sectionId === 'userListSection') {
+        loadUsers();
+      }
+    }
 
     // INIT
     window.onload = async () => {
